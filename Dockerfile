@@ -1,4 +1,5 @@
 # https://github.com/jorge07/alpine-php
+# https://dev.whatwedo.ch/whatwedo/php-alpine
 FROM alpine:3.12 as main
 
 ARG COMPOSER_VERSION=2.0.8
@@ -37,6 +38,10 @@ RUN apk --update add ca-certificates \
     php8-dom@cast \
     php8-fpm@cast \
     php8-sodium@cast \
+    php8-memcached@cast \
+    php8-redis@cast \
+    php8-swoole@cast \
+    php8-imagick@cast \
     # Vim \
     vim \
     curl \
@@ -45,9 +50,11 @@ RUN apk --update add ca-certificates \
     # Binary php8 -> php \
     && ln -s /usr/bin/php8 /usr/bin/php \
     # Download composer.
-    && curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/bin --filename=composer --version=${COMPOSER_VERSION} \
-	# Clean up
-    && rm -rf /var/cache/apk/*
+    && curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/bin --filename=composer --version=${COMPOSER_VERSION}
+
+# Clean up
+RUN rm -rf /var/cache/apk/*
+
 
 ADD rootfs /
 
